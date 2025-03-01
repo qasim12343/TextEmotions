@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Predict Emotions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      width: 300px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #response {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Predit Text Emotions</h1>
+  <input type="text" id="userInput" placeholder=" Text ...." />
+  <input type="text" id="URL" placeholder=" URL ....." />
+  <button onclick="sendText()">Submit</button>
+  
+  <div id="response"></div>
+
+  <script>
+    async function sendText() {
+      const inputText = document.getElementById("userInput").value;
+      const URL = document.getElementById("URL").value;
+      if (inputText.trim() === "") {
+        document.getElementById("response").textContent = "Please enter some text!";
+        return;
+      }
+  
+      try {
+        const response = await fetch(URL+"/process/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ text: inputText })
+        });
+  
+        const result = await response.json();
+        document.getElementById("response").textContent = result.response;  // Fix here
+      } catch (error) {
+        document.getElementById("response").textContent = "Error communicating with the server!";
+      }
+    }
+  </script>
+
+</body>
+</html>
